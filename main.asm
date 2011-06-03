@@ -18,13 +18,16 @@
 org 0x100
 bits 16
 
-main:
-  xor al,al
-  call dos_exit
-  ; Never reach this point
+jmp main
 
 ; Exit program with exit code al
 dos_exit:
-  mov ah, 0x4c
-  int 0x21
+	mov ah, 0x4c
+	int 0x21
 ret
+
+; Entry point of odhcploc
+main:
+	xor al, al
+	call dos_exit
+	; Never reach this point
