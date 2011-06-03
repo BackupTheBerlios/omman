@@ -13,17 +13,16 @@
 ; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ;
 ; For VIM asmsyntax=nasm
-
-; COM program -> starting at 0x100
-org 0x100
 bits 16
 
-jmp main
+; Defined labels
 
-%include "dos.asm"
+; dos_exit
 
-; Entry point of omman
-main:
-	xor al, al
-	call dos_exit
-	; Never reach this point
+; Definitions
+
+; Exit program with exit code al
+dos_exit:
+	mov ah, 0x4c
+	int 0x21
+ret
