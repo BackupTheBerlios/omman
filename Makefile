@@ -16,7 +16,7 @@
 SRC = main.asm
 ASM = nasm
 
-omman.com: $(OBJS)
+omman.com: $(SRC)
 	$(ASM) -f bin main.asm -o omman.com
 
 clean:
