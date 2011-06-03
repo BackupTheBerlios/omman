@@ -13,18 +13,27 @@
 ; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ;
 ; For VIM asmsyntax=nasm
-
-; COM program -> starting at 0x100
-org 0x100
 bits 16
 
-jmp main
+; Defined macros
 
-%include "dos.asm"
-%include "mac.asm"
+; mac_push
+; mac_pop
 
-; Entry point of omman
-main:
-	xor al, al
-	call dos_exit
-	; Never reach this point
+; Definitions
+
+; Push all parameters
+%macro mac_push 1-*
+	%rep %0
+		push %1
+		%rotate 1
+	%endrep
+%endmacro
+
+; Pop all parameters
+%macro  mac_pop 1-*
+	%rep %0
+		%rotate -1
+		pop %1
+	%endrep
+%endmacro
