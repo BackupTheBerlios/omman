@@ -19,6 +19,7 @@ bits 16
 
 ; mac_push
 ; mac_pop
+; mac_set_stack
 
 ; Definitions
 
@@ -36,4 +37,12 @@ bits 16
 		%rotate -1
 		pop %1
 	%endrep
+%endmacro
+
+; Set stack to cs:data_stack.
+; Modifies ax
+%macro mac_set_stack 0
+	mov ax, cs
+	mov ss, ax
+	mov sp, data_stack
 %endmacro

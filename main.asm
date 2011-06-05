@@ -25,6 +25,9 @@ jmp main
 
 ; Entry point of omman
 main:
+	mac_set_stack
 	xor al, al
 	call dos_exit
 	; Never reach this point
+
+%include "data.asm"
