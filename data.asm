@@ -18,10 +18,11 @@ bits 16
 ; Defined labels
 
 ; data_addr_base
-; data_dynmem
 ; data_stack
+
+; Constants
+%define DATA_STACK_ITEMS	128
 
 ; Definitions
 data_addr_base:
-data_stack	equ data_addr_base + (128 * 2)
-data_dynmem	equ data_stack
+data_stack	equ data_addr_base + (DATA_STACK_ITEMS * 2)
