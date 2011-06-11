@@ -20,6 +20,7 @@ bits 16
 ; dos_exit
 ; dos_malloc
 ; dos_realloc
+; dos_write
 
 ; Definitions
 
@@ -47,5 +48,13 @@ ret
 ; bx contains largest free block
 dos_realloc:
 	mov ah, 0x4a
+	int 0x21
+ret
+
+; Write buffer pointed by ds:dx with size cx to file handle bx
+; Function set's CF on error.
+; ax contains number of real written bytes, or if CF is set, error code
+dos_write:
+	mov ah, 0x40
 	int 0x21
 ret
