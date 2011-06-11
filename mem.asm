@@ -13,23 +13,18 @@
 ; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ;
 ; For VIM asmsyntax=nasm
-
-; COM program -> starting at 0x100
-org 0x100
 bits 16
 
-jmp main
+; Defined labels
 
-%include "dos.asm"
-%include "mac.asm"
-%include "mem.asm"
+; mem_sysmem_realloc
 
-; Entry point of omman
-main:
-	mac_set_stack
-	call mem_sysmem_realloc
-	xor al, al
-	call dos_exit
-	; Never reach this point
+; Definitions
 
-%include "data.asm"
+; Reallocate system memory to minimal working size
+mem_sysmem_realloc:
+	mov ax, cs
+	mov es, ax
+	mov bx, ((data_stack - $$ + 0x100) / 16) + 1
+	call dos_realloc
+ret
