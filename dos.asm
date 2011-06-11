@@ -18,11 +18,34 @@ bits 16
 ; Defined labels
 
 ; dos_exit
+; dos_malloc
+; dos_realloc
 
 ; Definitions
 
 ; Exit program with exit code al
 dos_exit:
 	mov ah, 0x4c
+	int 0x21
+ret
+
+; Allocate new memory
+; bx is required memory size in paragraphs (16 bytes)
+; function sets CF if reallocation was unsuccessful.
+; ax is error code or segment of allocated memory
+; bx contains largest free block
+dos_malloc:
+	mov ah, 0x48
+	int 0x21
+ret
+
+; Reallocate allocated memory
+; es is segment of allocated memory
+; bx is required memory size in paragraphs (16 bytes)
+; function sets CF if reallocation was unsuccessful.
+; ax is error code
+; bx contains largest free block
+dos_realloc:
+	mov ah, 0x4a
 	int 0x21
 ret
