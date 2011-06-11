@@ -27,3 +27,9 @@ run: omman.com
 	mkdir -p sandbox
 	cp omman.com sandbox
 	dosbox -c "mount c sandbox" -c "c:" -c "omman.com" -c "exit"
+
+# Debug program inside sandbox directory in dosbox and insight debugger
+run-debug: omman.com
+	mkdir -p sandbox
+	cp omman.com sandbox
+	dosbox -c "mount c sandbox" -c "c:" -c "insight.com omman.com" -c "exit"
