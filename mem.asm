@@ -17,17 +17,47 @@ bits 16
 
 ; Defined labels
 
+; mem_init
 ; mem_int_clear
 ; mem_int_malloc
 ; mem_sysmem_realloc
 
 ; Constants
+
+; Dynamic memory block size
+MEM_BLOCK_SIZE		equ 1024
 ; Minimal system memory to alloc
-MEM_SYSMEM_MIN	equ 1024 * 16
+MEM_SYSMEM_MIN		equ MEM_BLOCK_SIZE * 16
 ; Prefered system memory to alloc
-MEM_SYSMEM_PREF	equ 1024 * 64 * 4
+MEM_SYSMEM_PREF		equ MEM_BLOCK_SIZE * 64 * 4
+; Number of blocks
+MEM_NO_BLOCKS		equ MEM_SYSMEM_PREF / MEM_BLOCK_SIZE
+; Size of bitmap with allocated blocks
+MEM_BITMAP_SIZE		equ MEM_NO_BLOCKS / 8
+; Offset of bitmap
+MEM_BITMAP_OFFSET	equ 0
+; Offset of fist block
+MEM_BLOCKS_OFFSET	equ MEM_BITMAP_SIZE
 
 ; Definitions
+
+; Initialize memory
+mem_init:
+	call mem_int_malloc
+	mov [data_dynmem_seg], ax
+	mov [data_dynmem_size], bx
+
+	; Divide data_dynmem_size by mem_block_size to get number of really
+	; allocated blocks
+	xor dx, dx
+	mov ax, bx
+	sub ax, (MEM_BITMAP_SIZE / 16)
+	mov bx, (MEM_BLOCK_SIZE / 16)
+	div bx
+	mov [data_dynmem_no_blocks], ax
+
+	call mem_int_clear
+ret
 
 ; Clear allocated memory
 mem_int_clear:
@@ -53,12 +83,12 @@ ret
 ; Malloc memory. After successful allocation, ax contains segment of
 ; memory and bx allocated memory
 mem_int_malloc:
-	mov bx, MEM_SYSMEM_PREF / 16
+	mov bx, (MEM_SYSMEM_PREF + MEM_BITMAP_SIZE) / 16
 	call dos_malloc
 	jnc .ret
 	; Allocation was unsuccessful
 	; bx now contains largest block to alloc
-	cmp bx, MEM_SYSMEM_MIN / 16
+	cmp bx, (MEM_SYSMEM_MIN + MEM_BITMAP_SIZE) / 16
 	; If allocatable block < MIN -> exit
 	jb .error_exit
 	; alloc maximum possible <MEM_SYSMEM_MIN, MEM_SYSMEM_PREF)

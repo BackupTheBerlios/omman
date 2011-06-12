@@ -51,7 +51,13 @@ DATA_STACK_ITEMS	equ 128
 ; Definitions
 
 data_addr_base:
+; Segment of dynamic memory
 data_resw	dynmem_seg, 1
+; Size in paragraphs (16 bytes) of dynamic memory
 data_resw	dynmem_size, 1
+; Number of allocated blocks of dynamic memory
+data_resw	dynmem_no_blocks, 1
+; Start of stack
 data_resw	stack_start, DATA_STACK_ITEMS
+; End of stack (begin of sp)
 data_resb	stack, 0
