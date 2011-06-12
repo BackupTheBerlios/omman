@@ -32,7 +32,7 @@ ret
 
 ; Allocate new memory
 ; bx is required memory size in paragraphs (16 bytes)
-; function sets CF if reallocation was unsuccessful.
+; function sets CF if allocation was unsuccessful.
 ; ax is error code or segment of allocated memory
 ; bx contains largest free block
 dos_malloc:
