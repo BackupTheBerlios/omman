@@ -17,6 +17,7 @@ bits 16
 
 ; Defined labels
 
+; mem_alloc
 ; mem_init
 ; mem_int_clear
 ; mem_int_malloc
@@ -40,6 +41,58 @@ MEM_BITMAP_OFFSET	equ 0
 MEM_BLOCKS_OFFSET	equ MEM_BITMAP_SIZE
 
 ; Definitions
+
+; Allocate one block of memory. Returned segment is stored in ax
+; on error, CF is set and ax contains 0
+mem_alloc:
+	mac_push es, si, cx, dx
+	; Find unallocated block
+	mov es, [data_dynmem_seg]
+	mov si, 0
+.find_free_byte_loop:
+	cmp byte [es:si], 0xff
+	jne .free_byte_found
+	; Byte is 0xff -> full
+	inc si
+	mov ax, si
+	shl ax, 3
+	cmp ax, [data_dynmem_no_blocks]
+	; If si * 8 < data_dynmem_no_blocks -> loop
+	jb .find_free_byte_loop
+	; We didn't found free byte -> error
+	jmp .ret_not_found
+
+.free_byte_found:
+	mov cx, 0
+.find_free_bit_loop:
+	mov al, [es:si]
+	shr al, cl
+	and al, 0x01
+	jz .free_bit_found
+	inc cl
+	jmp .find_free_bit_loop
+
+.free_bit_found:
+	; Set bit full
+	mov al, 0x01
+	shl al, cl
+	or byte [es:si], al
+	; Compute segment
+	mov ax, si
+	shl ax, 3
+	add ax, cx
+	mov dx, (MEM_BLOCK_SIZE / 16)
+	mul dx
+	add ax, [data_dynmem_seg]
+	add ax, (MEM_BLOCKS_OFFSET / 16)
+	clc
+	jmp .ret
+.ret_not_found:
+	mov ax, 0
+	stc
+.ret:
+	mac_pop es, si, cx, dx
+ret
 
 ; Initialize memory
 mem_init:
