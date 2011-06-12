@@ -15,14 +15,42 @@
 ; For VIM asmsyntax=nasm
 bits 16
 
-; Defined labels
+; Defined labels, macros
 
 ; data_addr_base
+; data_resb
+; data_resw
 ; data_stack
 
 ; Constants
 %define DATA_STACK_ITEMS	128
 
+; Macros
+
+; Define data_%1 equ data_addr_base + DATA_POS (starting 0, incremented by %2)
+%macro data_resb 2
+	%ifndef DATA_POS
+		%assign DATA_POS 0
+	%endif
+
+	data_%1 equ data_addr_base + DATA_POS
+	%assign DATA_POS (DATA_POS + %2)
+%endmacro
+
+; Define data_%1 equ data_addr_base + DATA_POS (starting 0, incremented by
+; 2 * %2)
+%macro data_resw 2
+	%ifndef DATA_POS
+		%assign DATA_POS 0
+	%endif
+
+	data_%1 equ data_addr_base + DATA_POS
+	%assign DATA_POS (DATA_POS + (%2 * 2))
+%endmacro
+
 ; Definitions
+
 data_addr_base:
-data_stack	equ data_addr_base + (DATA_STACK_ITEMS * 2)
+data_resw	dynmem_seg, 1
+data_resw	stack_start, DATA_STACK_ITEMS
+data_resb	stack, 0
