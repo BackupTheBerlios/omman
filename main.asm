@@ -24,10 +24,20 @@ jmp main
 %include "mac.asm"
 %include "mem.asm"
 
+; Initialize memory
+mem_init:
+	call mem_int_malloc
+	mov [data_dynmem_seg], ax
+	mov [data_dynmem_size], bx
+	call mem_int_clear
+ret
+
 ; Entry point of omman
 main:
 	mac_set_stack
 	call mem_sysmem_realloc
+	call mem_init
+
 	xor al, al
 	call dos_exit
 	; Never reach this point

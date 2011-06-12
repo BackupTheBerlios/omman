@@ -23,7 +23,7 @@ bits 16
 ; data_stack
 
 ; Constants
-%define DATA_STACK_ITEMS	128
+DATA_STACK_ITEMS	equ 128
 
 ; Macros
 
@@ -52,5 +52,6 @@ bits 16
 
 data_addr_base:
 data_resw	dynmem_seg, 1
+data_resw	dynmem_size, 1
 data_resw	stack_start, DATA_STACK_ITEMS
 data_resb	stack, 0
