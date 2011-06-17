@@ -18,6 +18,7 @@ bits 16
 ; Defined labels
 
 ; mem_alloc
+; mem_free
 ; mem_init
 ; mem_int_clear
 ; mem_int_malloc
@@ -92,6 +93,33 @@ mem_alloc:
 	stc
 .ret:
 	mac_pop es, si, cx, dx
+ret
+
+; Free one block of memory. AX contains segment of allocated memory.
+mem_free:
+	mac_push es, ax, cx, dx, si
+
+	mov es, [data_dynmem_seg]
+	sub ax, (MEM_BLOCKS_OFFSET / 16)
+	sub ax, [data_dynmem_seg]
+	; ax is segment to set
+	mov cx, (MEM_BLOCK_SIZE / 16)
+	xor dx, dx
+	div cx
+	; ax is bit to set
+	mov si, ax
+	shr si, 3
+	; si is byte to set
+	mov cx, ax
+	and cx, 0x07
+	; cx (cl) is bit in byte to set
+	mov al, 0x01
+	shl al, cl
+	not al
+	; al is mask to and
+	and byte [es:si], al
+
+	mac_pop es, ax, cx, dx, si
 ret
 
 ; Initialize memory
