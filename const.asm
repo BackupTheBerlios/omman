@@ -18,12 +18,12 @@ bits 16
 ; Constants
 
 ; Maximal length of path + trailing 0
-LIM_MAXPATH	equ 80
+CONST_MAXPATH	equ 80
 ; Maximal length of drive definition (including trailing : and 0)
-LIM_MAXDRIVE	equ  3
+CONST_MAXDRIVE	equ  3
 ; Maximum length of directory (including starting and trailing \ and 0)
-LIM_MAXDIR	equ 66
+CONST_MAXDIR	equ 66
 ; Maxfimum length of file name (including trailing 0)
-LIM_MAXFILE	equ  9
+CONST_MAXFILE	equ  9
 ; Maximum length of file extension (including starting . and trailing 0)
-LIM_MAXEXT	equ  5
+CONST_MAXEXT	equ  5

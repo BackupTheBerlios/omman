@@ -19,7 +19,7 @@ bits 16
 STRUC dirm
 	.seg:		resw 1
 	.items:		resw 1
-	.dir:		resb (LIM_MAXDIR + LIM_MAXDRIVE - 1)
+	.dir:		resb (CONST_MAXDIR + CONST_MAXDRIVE - 1)
 ENDSTRUC
 
 ; Defined labels

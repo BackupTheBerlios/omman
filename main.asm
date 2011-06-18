@@ -20,7 +20,7 @@ bits 16
 
 jmp main
 
-%include "consts.asm"
+%include "const.asm"
 %include "mac.asm"
 
 %include "dirm.asm"
