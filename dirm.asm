@@ -13,28 +13,27 @@
 ; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ;
 ; For VIM asmsyntax=nasm
-
-; COM program -> starting at 0x100
-org 0x100
 bits 16
 
-jmp main
+; Structures
+STRUC dirm
+	.seg:		resw 1
+	.items:		resw 1
+	.dir:		resb (LIM_MAXDIR + LIM_MAXDRIVE - 1)
+ENDSTRUC
 
-%include "consts.asm"
-%include "mac.asm"
+; Defined labels
+; dirm_init
 
-%include "dirm.asm"
-%include "dos.asm"
-%include "mem.asm"
+; Definitions
 
-; Entry point of omman
-main:
-	mac_set_stack
-	call mem_sysmem_realloc
-	call mem_init
+; Initialize dirm structure pointed by es:di
+dirm_init:
+	mac_push ax, cx
 
-	xor al, al
-	call dos_exit
-	; Never reach this point
+	xor ax, ax
+	mov cx, dirm_size
+	rep stosb
 
-%include "data.asm"
+	mac_pop ax, cx
+ret

@@ -57,6 +57,10 @@ data_resw	dynmem_seg, 1
 data_resw	dynmem_size, 1
 ; Number of allocated blocks of dynamic memory
 data_resw	dynmem_no_blocks, 1
+; Left pane directory listing
+data_resb	left_dirm, dirm_size
+; Right pane directory listing
+data_resb	right_dirm, dirm_size
 ; Start of stack
 data_resw	stack_start, DATA_STACK_ITEMS
 ; End of stack (begin of sp)
