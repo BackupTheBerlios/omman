@@ -22,7 +22,13 @@ bits 16
 
 ; Write error and exit. Error message is in string format on ds:si address and
 ; al is exit code
-;err_cli:
-;	mov dx, si
-;	mov bx, 2
-;	mov cx, 
+err_cli:
+	push ax
+	mov dx, si
+	mov bx, 2
+	call str_len
+	call dos_write
+	pop ax
+	call dos_exit
+	; NOTREACHED
+ret
