@@ -29,11 +29,11 @@ ENDSTRUC
 
 ; Initialize dirm structure pointed by es:di
 dirm_init:
-	mac_push ax, cx
+	mac_push ax, cx, di
 
 	xor ax, ax
 	mov cx, dirm_size
 	rep stosb
 
-	mac_pop ax, cx
+	mac_pop ax, cx, di
 ret
