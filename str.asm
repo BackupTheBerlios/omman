@@ -13,30 +13,26 @@
 ; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ;
 ; For VIM asmsyntax=nasm
-
-; COM program -> starting at 0x100
-org 0x100
 bits 16
 
-jmp main
+; Defined labels
+; str_len
 
-%include "const.asm"
-%include "mac.asm"
+; Definitions
 
-%include "dirm.asm"
-%include "dos.asm"
-%include "err.asm"
-%include "mem.asm"
-%include "str.asm"
+; Get length of C format string. ds:si is address of string.
+; Returned value is stored in cx
+str_len:
+	mac_push si
 
-; Entry point of omman
-main:
-	mac_set_stack
-	call mem_sysmem_realloc
-	call mem_init
+	xor cx, cx
+.loop:
+	cmp byte [si], 0
+	je .ret
 
-	xor al, al
-	call dos_exit
-	; Never reach this point
-
-%include "data.asm"
+	inc si
+	inc cx
+	jmp .loop
+.ret:
+	mac_pop si
+ret

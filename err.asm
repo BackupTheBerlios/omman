@@ -13,30 +13,16 @@
 ; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ;
 ; For VIM asmsyntax=nasm
-
-; COM program -> starting at 0x100
-org 0x100
 bits 16
 
-jmp main
+; Defined labels
+; err_cli
 
-%include "const.asm"
-%include "mac.asm"
+; Definitions
 
-%include "dirm.asm"
-%include "dos.asm"
-%include "err.asm"
-%include "mem.asm"
-%include "str.asm"
-
-; Entry point of omman
-main:
-	mac_set_stack
-	call mem_sysmem_realloc
-	call mem_init
-
-	xor al, al
-	call dos_exit
-	; Never reach this point
-
-%include "data.asm"
+; Write error and exit. Error message is in string format on ds:si address and
+; al is exit code
+;err_cli:
+;	mov dx, si
+;	mov bx, 2
+;	mov cx, 
