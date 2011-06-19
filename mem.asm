@@ -178,8 +178,9 @@ mem_int_malloc:
 	jnc .ret
 
 .error_exit:
+	mov si, dmsgs_cant_alloc_mem
 	mov al, 1
-	call dos_exit
+	call err_cli
 	; NOTREACHED
 .ret:
 ret
