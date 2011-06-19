@@ -13,7 +13,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-SRC = const.asm data.asm dirm.asm dos.asm err.asm mac.asm main.asm mem.asm str.asm
+SRC = const.asm data.asm dirm.asm dmsgs.asm dos.asm err.asm mac.asm main.asm mem.asm str.asm
 ASM = nasm
 
 omman.com: $(SRC)

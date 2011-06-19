@@ -13,31 +13,8 @@
 ; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ;
 ; For VIM asmsyntax=nasm
-
-; COM program -> starting at 0x100
-org 0x100
 bits 16
 
-jmp main
+; File contains messages string
 
-%include "const.asm"
-%include "mac.asm"
-
-%include "dirm.asm"
-%include "dos.asm"
-%include "err.asm"
-%include "mem.asm"
-%include "str.asm"
-
-; Entry point of omman
-main:
-	mac_set_stack
-	call mem_sysmem_realloc
-	call mem_init
-
-	xor al, al
-	call dos_exit
-	; Never reach this point
-
-%include "dmsgs.asm"
-%include "data.asm"
+dmsgs_cant_alloc_mem:		db "Can't allocate memory", 0
